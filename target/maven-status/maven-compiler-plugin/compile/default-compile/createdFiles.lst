@@ -1,0 +1,16 @@
+edu/ifsc/fln/confortaid/controller/ServicoController.class
+edu/ifsc/fln/confortaid/controller/AgendamentoController.class
+edu/ifsc/fln/confortaid/model/Servico$Situacao.class
+edu/ifsc/fln/confortaid/model/Servico.class
+edu/ifsc/fln/confortaid/repository/AgendamentoRepository.class
+edu/ifsc/fln/confortaid/model/Agendamento.class
+edu/ifsc/fln/confortaid/repository/ProfissionalRepository.class
+edu/ifsc/fln/confortaid/model/Profissional.class
+edu/ifsc/fln/confortaid/repository/ClienteRepository.class
+edu/ifsc/fln/confortaid/repository/ServicoRepository.class
+edu/ifsc/fln/confortaid/repository/WebConfig.class
+edu/ifsc/fln/confortaid/ConfortaidProjectApplication.class
+edu/ifsc/fln/confortaid/model/Usuario.class
+edu/ifsc/fln/confortaid/controller/ClienteController.class
+edu/ifsc/fln/confortaid/model/Cliente.class
+edu/ifsc/fln/confortaid/controller/ProfissionalController.class

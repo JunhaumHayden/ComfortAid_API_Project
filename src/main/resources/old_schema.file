@@ -1,0 +1,61 @@
+
+-- Tabela Usuario
+CREATE TABLE IF NOT EXISTS usuario (
+   id INT NOT NULL AUTO_INCREMENT,
+   nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    senha VARCHAR(256) NOT NULL,
+    telefone VARCHAR(15),
+    cep VARCHAR(9),
+    numeroEndereco VARCHAR(10),
+    complementoEndereco VARCHAR(100),
+    CONSTRAINT pk_usuario PRIMARY KEY(id)
+    );
+
+-- Tabela Cliente
+CREATE TABLE IF NOT EXISTS cliente (
+    id_usuario INT NOT NULL REFERENCES usuario(id),
+    cpf VARCHAR(11) NOT NULL UNIQUE,
+    CONSTRAINT pk_cliente PRIMARY KEY (id_usuario),
+    CONSTRAINT fk_usuario_cliente FOREIGN KEY (id_usuario) REFERENCES usuario(id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+    );
+
+-- Tabela Profissional
+CREATE TABLE IF NOT EXISTS profissional (
+    id_usuario INT NOT NULL REFERENCES usuario(id),
+    especialidade VARCHAR(100) NOT NULL,
+    registroProfissional VARCHAR(50) UNIQUE,
+    CONSTRAINT pk_profissional PRIMARY KEY (id_usuario),
+    CONSTRAINT fk_usuario_profissional FOREIGN KEY (id_usuario) REFERENCES usuario(id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+    );
+
+-- Tabela Servico
+CREATE TABLE IF NOT EXISTS servico (
+    id INT AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    descricao TEXT,
+    preco DECIMAL(10, 2) NOT NULL,
+    duracao INT NOT NULL,
+    situacao ENUM('ATIVO', 'INATIVO', 'BLOQUEADO') NOT NULL DEFAULT 'BLOQUEADO',
+    profissional_id INT NOT NULL,
+    CONSTRAINT pk_servico PRIMARY KEY (id),
+    CONSTRAINT fk_servico_profissional FOREIGN KEY (profissional_id) REFERENCES profissional(id_usuario)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+    );
+
+-- Tabela Imagem
+CREATE TABLE IF NOT EXISTS imagem (
+    id INT NOT NULL AUTO_INCREMENT,
+    usuario_id INT NOT NULL,
+    imagem LONGBLOB NOT NULL, -- Armazenar os dados binários da imagem
+    tipo VARCHAR(50) NOT NULL, -- Armazenar o MIME type da imagem
+    CONSTRAINT pk_imagem PRIMARY KEY (id),
+    CONSTRAINT fk_imagem_usuario FOREIGN KEY (usuario_id) REFERENCES usuario(id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+    );

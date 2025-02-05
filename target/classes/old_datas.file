@@ -1,0 +1,23 @@
+-- Inserir dados na tabela Usuario
+INSERT INTO usuario (nome, email, senha, telefone, cep, numeroEndereco, complementoEndereco)
+VALUES
+    ('João Silva', 'joao.silva@example.com', 'senha123', '(11) 99999-0001', '12345-678', '123', 'Apto 101'),
+    ('Maria Oliveira', 'maria.oliveira@example.com', 'senha456', '(21) 98888-0002', '23456-789', '456', 'Casa'),
+    ('Pedro Santos', 'pedro.santos@example.com', 'senha789', '(31) 97777-0003', '34567-890', '789', 'Sala 4');
+
+-- Inserir dados na tabela Cliente
+INSERT INTO cliente (id_usuario, cpf)
+VALUES
+    (1, '12345678901'),
+    (2, '98765432100');
+
+-- Inserir dados na tabela Profissional
+INSERT INTO profissional (id_usuario, especialidade, registroProfissional)
+VALUES
+    (3, 'Massoterapia', 'REG12345');
+
+-- Inserir dados na tabela Servico
+INSERT INTO servico (nome, descricao, preco, duracao, situacao, profissional_id)
+VALUES
+    ('Massagem Relaxante', 'Sessão de massagem para aliviar o estresse e tensões', 120.00, 60, 'ATIVO', 3),
+    ('Massagem Terapêutica', 'Sessão terapêutica para tratar dores específicas', 150.00, 90, 'INATIVO', 3);
