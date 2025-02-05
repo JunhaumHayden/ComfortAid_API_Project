@@ -13,6 +13,8 @@ Padrão de Projeto:
 ### Diagrama de ER
 Segue o diagrama de ER do esquema do banco de dados gerado em Mermaid para documentação:
 
+
+
 ```mermaid
 erDiagram
     usuario {
