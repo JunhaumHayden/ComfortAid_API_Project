@@ -410,3 +410,5 @@ img/
 # Diretórios
 img/
 vendor/
+.mvn/
+.vscode/
