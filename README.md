@@ -137,3 +137,4 @@ POST http://localhost:8080/api/agendamentos
     "dataHora": "2024-01-12T10:00:00"
 }
 ```
+
