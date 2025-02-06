@@ -138,3 +138,31 @@ POST http://localhost:8080/api/agendamentos
 }
 ```
 
+### Enviar uma imagem para um cliente
+Você pode usar o curl para enviar uma imagem para o endpoint /api/imagens/cliente/{id}:
+''' bash
+
+curl -X POST "http://localhost:8080/api/imagens/cliente/1" -H "Content-Type: multipart/form-data" -F "foto=@/path/to/your/image.jpg"
+'''
+### Enviar uma imagem para um profissional
+Da mesma forma, você pode enviar uma imagem para o endpoint /api/imagens/profissional/{id}:
+''' bash
+
+curl -X POST "http://localhost:8080/api/imagens/profissional/1" -H "Content-Type: multipart/form-data" -F "foto=@/path/to/your/image.jpg"
+'''
+
+### Recuperar uma imagem de um cliente
+Para recuperar a imagem de um cliente, você pode fazer uma requisição GET para o endpoint /api/imagens/cliente/{id}:
+''' bash
+
+curl -X GET "http://localhost:8080/api/imagens/cliente/1" --output cliente_foto.jpg
+'''
+### Recuperar uma imagem de um profissional
+Para recuperar a imagem de um profissional, você pode fazer uma requisição GET para o endpoint /api/imagens/profissional/{id}:
+''' bash
+
+curl -X GET "http://localhost:8080/api/imagens/profissional/1" --output profissional_foto.jpg
+'''
+> Esses exemplos mostram como você pode interagir com os endpoints para enviar e recuperar imagens usando curl. Certifique-se de substituir /path/to/your/image.jpg pelo caminho real da imagem que você deseja enviar.
+
+> Também é possível usar o [postman](https://cursos.alura.com.br/forum/topico-envio-de-foto-via-postman-197419#:~:text=Com%20a%20API%20em%20execução,a%20requisição%20do%20tipo%20POST.)
