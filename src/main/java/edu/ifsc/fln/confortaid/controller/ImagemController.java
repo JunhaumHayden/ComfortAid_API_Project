@@ -21,7 +21,7 @@ public class ImagemController {
     @Autowired
     private ImagemService imagemService;
 
-    @GetMapping("/cliente/{id}/primeira")
+    @GetMapping("/cliente/{id}/foto")
     public ResponseEntity<byte[]> getPrimeiraFotoCliente(@PathVariable Integer id) {
         return imagemService.getPrimeiraFotoCliente(id)
                 .map(foto -> {
@@ -32,7 +32,7 @@ public class ImagemController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping("/profissional/{id}/primeira")
+    @GetMapping("/profissional/{id}/foto")
     public ResponseEntity<byte[]> getPrimeiraFotoProfissional(@PathVariable Integer id) {
         return imagemService.getPrimeiraFotoProfissional(id)
                 .map(foto -> {

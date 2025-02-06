@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>edu.ifsc.fln</groupId>
 	<artifactId>comfortaid</artifactId>
-	<version>0.0.3-SNAPSHOT</version>
+	<version>0.0.4-SNAPSHOT</version>
 	<name>Comfortaid Project</name>
 	<description>Plain Rest Api for ComfortAid Project</description>
 	<url>https://github.com/JunhaumHayden/JAVA</url>

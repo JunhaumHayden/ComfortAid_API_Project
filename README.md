@@ -75,6 +75,31 @@ profissional está relacionado a servico (1-para-muitos).
 usuario está relacionado a imagem (1-para-muitos), permitindo múltiplas imagens por usuário.
 Esse diagrama documenta claramente o modelo de dados e pode ser usado como referência para o desenvolvimento e comunicação do projeto.
 
+### Configurando a porta da aplicação
+A aplicação ComfortAid usa a porta 5000 por padrão, pode-se fazer uma das seguintes configurações:
+
+- a) Configuração direta ao executar o .jar
+
+Especifique a porta desejada ao iniciar sua aplicação:
+``` bash
+java -jar comfortaid-0.0.1-SNAPSHOT.jar --server.port=80
+```
+- b) Configuração no arquivo `application.properties`
+
+No arquivo `src/main/resources/application.properties`, configure a porta:
+``` properties
+server.port=80
+```
+Após isso, gere novamente o arquivo .jar com:
+``` bsah
+mvn clean package
+```
+
+>   No Linux ou macOS, você precisa de privilégios de superusuário para que uma aplicação acesse portas abaixo de 1024, como a 80. No terminal, você deve usar o comando sudo ao iniciar sua aplicação:
+> ``` bash
+> sudo java -jar comfortaid-0.0.1-SNAPSHOT.jar --server.port=80
+>``` 
+
 ### Teste com Postman
 Você pode testar os seguintes endpoints no Postman:
 
