@@ -1,4 +1,5 @@
 
+
 ## Estrutura do Projeto
 Tecnologias Utilizadas:
 - Maven: Gerenciador de dependências.
@@ -61,6 +62,58 @@ erDiagram
     usuario ||--o| profissional : "1 para 1"
     profissional ||--o{ servico : "1 para N"
     usuario ||--o{ imagem : "1 para N"
+```
+
+
+### Diagrama de Classes
+
+Segue o diagrama de classes do projeto gerado em Mermaid para documentação:
+
+```mermaid
+classDiagram
+    class Usuario {
+        +int id
+        +String nome
+        +String email
+        +String senha
+        +String telefone
+        +String cep
+        +String numeroEndereco
+        +String complementoEndereco
+    }
+
+    class Cliente {
+        +int id_usuario
+        +String cpf
+    }
+
+    class Profissional {
+        +int id_usuario
+        +String especialidade
+        +String registroProfissional
+    }
+
+    class Servico {
+        +int id
+        +String nome
+        +String descricao
+        +float preco
+        +int duracao
+        +String situacao
+        +int profissional_id
+    }
+
+    class Imagem {
+        +int id
+        +int usuario_id
+        +byte[] imagem
+        +String tipo
+    }
+
+    Usuario <|-- Cliente : "herança"
+    Usuario <|-- Profissional : "herança"
+    Profissional "1" --> "0..*" Servico : "oferece"
+    Usuario "1" --> "0..*" Imagem : "possui"
 ```
 
 ## Explicação do Diagrama

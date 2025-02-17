@@ -1,13 +1,11 @@
 edu/ifsc/fln/confortaid/repository/FotoClienteRepository.class
 edu/ifsc/fln/confortaid/repository/FotoProfissionalRepository.class
-edu/ifsc/fln/confortaid/model/Avaliacao.class
 edu/ifsc/fln/confortaid/controller/ServicoController.class
 edu/ifsc/fln/confortaid/model/Servico.class
 edu/ifsc/fln/confortaid/service/ImagemService.class
 edu/ifsc/fln/confortaid/repository/AgendamentoRepository.class
 edu/ifsc/fln/confortaid/model/Agendamento.class
 edu/ifsc/fln/confortaid/repository/ProfissionalRepository.class
-edu/ifsc/fln/confortaid/repository/UsuarioRepository.class
 edu/ifsc/fln/confortaid/repository/ClienteRepository.class
 edu/ifsc/fln/confortaid/repository/ServicoRepository.class
 edu/ifsc/fln/confortaid/ConfortaidProjectApplication.class
@@ -21,7 +19,6 @@ edu/ifsc/fln/confortaid/model/Profissional.class
 edu/ifsc/fln/confortaid/model/ClienteDTO.class
 edu/ifsc/fln/confortaid/repository/WebConfig.class
 edu/ifsc/fln/confortaid/model/FotoProfissional.class
-edu/ifsc/fln/confortaid/repository/AvaliacaoRepository.class
 edu/ifsc/fln/confortaid/model/Usuario.class
 edu/ifsc/fln/confortaid/model/InsertImages.class
 edu/ifsc/fln/confortaid/controller/ProfissionalController.class
