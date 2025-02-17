@@ -1,11 +1,10 @@
 package edu.ifsc.fln.confortaid.controller;
 
 import edu.ifsc.fln.confortaid.model.Cliente;
-import edu.ifsc.fln.confortaid.model.ClienteDTO;
-import edu.ifsc.fln.confortaid.model.Profissional;
-import edu.ifsc.fln.confortaid.model.ProfissionalDTO;
+import edu.ifsc.fln.confortaid.DTO.ClienteDTO;
 import edu.ifsc.fln.confortaid.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,37 +12,45 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/clientes")
+@RequestMapping("/clientes")
 public class ClienteController {
 
     @Autowired
     private ClienteRepository clienteRepository;
 
-    @GetMapping
+    @GetMapping("/nodto")
     public List<Cliente> listarTodos() {
         return clienteRepository.findAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/nodto/{id}")
     public ResponseEntity<Cliente> buscarPorId(@PathVariable Integer id) {
         return clienteRepository.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
-    public Cliente criar(@RequestBody Cliente cliente) {
-        return clienteRepository.save(cliente);
+    @PostMapping("/{id}")
+    public ResponseEntity<ClienteDTO> criar(@RequestBody Cliente cliente) {
+        Cliente novoCliente = clienteRepository.save(cliente);
+        ClienteDTO clienteDTO = convertToDTO(novoCliente);
+        return ResponseEntity.status(HttpStatus.CREATED).body(clienteDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Cliente> atualizar(@PathVariable Integer id, @RequestBody Cliente clienteAtualizado) {
+    public ResponseEntity<ClienteDTO> atualizar(@PathVariable Integer id, @RequestBody Cliente clienteAtualizado) {
         return clienteRepository.findById(id)
                 .map(cliente -> {
                     cliente.setNome(clienteAtualizado.getNome());
                     cliente.setEmail(clienteAtualizado.getEmail());
                     cliente.setCpf(clienteAtualizado.getCpf());
-                    return ResponseEntity.ok(clienteRepository.save(cliente));
+                    cliente.setTelefone(clienteAtualizado.getTelefone());
+                    cliente.setCep(clienteAtualizado.getCep());
+                    cliente.setNascimento(clienteAtualizado.getNascimento());
+                    cliente.setNumeroEndereco(clienteAtualizado.getNumeroEndereco());
+                    cliente.setComplementoEndereco(clienteAtualizado.getComplementoEndereco());
+                    Cliente atualizado = clienteRepository.save(cliente);
+                    return ResponseEntity.ok(convertToDTO(atualizado));
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -58,14 +65,14 @@ public class ClienteController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/dto")
+    @GetMapping
     public List<ClienteDTO> listarDTO() {
         return clienteRepository.findAll().stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/dto/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ClienteDTO> buscarPorIdDTO(@PathVariable Integer id) {
         return clienteRepository.findById(id)
                 .map(cliente -> ResponseEntity.ok(convertToDTO(cliente)))
@@ -81,7 +88,8 @@ public class ClienteController {
                 cliente.getCep(),
                 cliente.getNumeroEndereco(),
                 cliente.getComplementoEndereco(),
-                cliente.getCpf()
+                cliente.getCpf(),
+                cliente.getNascimento()
         );
     }
 }

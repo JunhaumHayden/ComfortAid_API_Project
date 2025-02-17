@@ -1,8 +1,9 @@
 package edu.ifsc.fln.confortaid.controller;
 
 import edu.ifsc.fln.confortaid.model.Profissional;
-import edu.ifsc.fln.confortaid.model.ProfissionalDTO;
+import edu.ifsc.fln.confortaid.DTO.ProfissionalDTO;
 import edu.ifsc.fln.confortaid.repository.ProfissionalRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,18 +12,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/profissionais")
+@RequestMapping("/profissionais")
 public class ProfissionalController {
 
     @Autowired
     private ProfissionalRepository profissionalRepository;
 
-    @GetMapping
+    @GetMapping("/nodto")
     public List<Profissional> listarTodos() {
         return profissionalRepository.findAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/nodto/{id}")
     public ResponseEntity<Profissional> buscarPorId(@PathVariable Integer id) {
         return profissionalRepository.findById(id)
                 .map(ResponseEntity::ok)
@@ -30,24 +31,28 @@ public class ProfissionalController {
     }
 
     @PostMapping
-    public Profissional criar(@RequestBody Profissional profissional) {
-        return profissionalRepository.save(profissional);
+    public ResponseEntity<ProfissionalDTO> criar(@RequestBody Profissional profissional) {
+        Profissional novoProfissional = profissionalRepository.save(profissional);
+        ProfissionalDTO profissionalDTO = convertToDTO(novoProfissional);
+        return ResponseEntity.status(HttpStatus.CREATED).body(profissionalDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Profissional> atualizar(@PathVariable Integer id, @RequestBody Profissional profissionalAtualizado) {
-        System.out.println(profissionalAtualizado);
-
+    public ResponseEntity<ProfissionalDTO> atualizar(@PathVariable Integer id, @RequestBody Profissional profissionalAtualizado) {
         return profissionalRepository.findById(id)
                 .map(profissional -> {
                     profissional.setNome(profissionalAtualizado.getNome());
                     profissional.setEmail(profissionalAtualizado.getEmail());
+                    profissional.setTelefone(profissionalAtualizado.getTelefone());
+                    profissional.setCep(profissionalAtualizado.getCep());
+                    profissional.setComplementoEndereco(profissionalAtualizado.getComplementoEndereco());
+                    profissional.setNumeroEndereco(profissionalAtualizado.getNumeroEndereco());
                     profissional.setEspecialidade(profissionalAtualizado.getEspecialidade());
                     profissional.setRegistroProfissional(profissionalAtualizado.getRegistroProfissional());
-                    return ResponseEntity.ok(profissionalRepository.save(profissional));
+                    Profissional atualizado = profissionalRepository.save(profissional);
+                    return ResponseEntity.ok(convertToDTO(atualizado));
                 })
                 .orElse(ResponseEntity.notFound().build());
-
     }
 
     @DeleteMapping("/{id}")
@@ -60,14 +65,14 @@ public class ProfissionalController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/dto")
+    @GetMapping
     public List<ProfissionalDTO> listarDTO() {
         return profissionalRepository.findAll().stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/dto/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ProfissionalDTO> buscarPorIdDTO(@PathVariable Integer id) {
         return profissionalRepository.findById(id)
                 .map(profissional -> ResponseEntity.ok(convertToDTO(profissional)))
@@ -80,7 +85,6 @@ public class ProfissionalController {
                 profissional.getNome(),
                 profissional.getEmail(),
                 profissional.getTelefone(),
-                profissional.getCep(),
                 profissional.getEspecialidade(),
                 profissional.getRegistroProfissional()
         );

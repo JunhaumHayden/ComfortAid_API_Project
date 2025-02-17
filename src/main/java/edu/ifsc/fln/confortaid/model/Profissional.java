@@ -1,18 +1,18 @@
 package edu.ifsc.fln.confortaid.model;
 
-import jakarta.persistence.Entity;
-import lombok.*;
-import java.util.List;
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@Data
 @Entity
-@Getter
-@Setter
-@AllArgsConstructor //construtor que receba todos os campos
-@NoArgsConstructor //construtor sem argumentos
+@Table(name = "profissional")
+@PrimaryKeyJoinColumn(name = "id_usuario")
+@EqualsAndHashCode(callSuper = true)
 public class Profissional extends Usuario {
+    @Column(nullable = false)
     private String especialidade;
+
+    @Column(unique = true)
     private String registroProfissional;
-
-
 }
-

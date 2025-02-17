@@ -2,16 +2,18 @@ package edu.ifsc.fln.confortaid.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import java.sql.Timestamp;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "avaliacao")
 public class Avaliacao {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "cliente_id", nullable = false)
@@ -21,12 +23,9 @@ public class Avaliacao {
     @JoinColumn(name = "servico_id", nullable = false)
     private Servico servico;
 
-    @Column(name = "data_hora", nullable = false)
-    private Timestamp dataHora;
+    private LocalDateTime dataHora;
 
-    @Column(name = "comentario", columnDefinition = "TEXT")
     private String comentario;
 
-    @Column(name = "nota")
-    private int nota;
+    private Integer nota;
 }

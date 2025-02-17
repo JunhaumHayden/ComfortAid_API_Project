@@ -1,4 +1,4 @@
-package edu.ifsc.fln.confortaid.model;
+package edu.ifsc.fln.confortaid.DTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +11,6 @@ public class ProfissionalDTO  {
     private String nome;
     private String email;
     private String telefone;
-    private String cep;
     private String especialidade;
     private String registroProfissional;
 }

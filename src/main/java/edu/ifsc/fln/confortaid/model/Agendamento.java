@@ -24,5 +24,11 @@ public class Agendamento {
 
     private LocalDateTime dataHora;
 
-    // Getters and Setters
+    //    @Setter(value = lombok.AccessLevel.NONE) // Impede a geração automática do setStatus
+    @Enumerated(EnumType.STRING)
+    private Agendamento.Status status= Status.PENDENTE; // Status inicial do agendamento: "Pendente".
+
+    public enum Status {
+        CONFIRMADO, PENDENTE, CANCELADO, ATENDIDO
+    }
 }

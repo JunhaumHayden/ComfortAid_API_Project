@@ -1,59 +1,63 @@
 package edu.ifsc.fln.confortaid.service;
 
-import edu.ifsc.fln.confortaid.model.FotoCliente;
-import edu.ifsc.fln.confortaid.model.FotoProfissional;
-import edu.ifsc.fln.confortaid.repository.FotoClienteRepository;
-import edu.ifsc.fln.confortaid.repository.FotoProfissionalRepository;
+import edu.ifsc.fln.confortaid.model.FotoUsuario;
+import edu.ifsc.fln.confortaid.model.FotoServico;
+import edu.ifsc.fln.confortaid.repository.FotoUsuarioRepository;
+import edu.ifsc.fln.confortaid.repository.FotoServicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.List;
-
+import java.util.Optional;
 @Service
 public class ImagemService {
+    @Autowired
+    private FotoUsuarioRepository fotoUsuarioRepository;
 
     @Autowired
-    private FotoClienteRepository fotoClienteRepository;
+    private FotoServicoRepository fotoServicoRepository;
 
-    @Autowired
-    private FotoProfissionalRepository fotoProfissionalRepository;
-
-    public Optional<byte[]> getPrimeiraFotoCliente(Integer clienteId) {
-        List<FotoCliente> fotos = fotoClienteRepository.findByClienteId(clienteId);
-        if (fotos.isEmpty()) {
-            return Optional.empty();
-        }
-        return Optional.of(fotos.get(0).getFoto());
+    public Optional<byte[]> getPrimeiraFotoUsuario(Integer usuarioId) {
+        return fotoUsuarioRepository.findByUsuarioId(usuarioId).stream()
+                .findFirst()
+                .map(FotoUsuario::getFoto);
     }
 
-    public List<FotoCliente> getFotosCliente(Integer clienteId) {
-        return fotoClienteRepository.findByClienteId(clienteId);
+    public List<FotoUsuario> getFotosUsuario(Integer usuarioId) {
+        return fotoUsuarioRepository.findByUsuarioId(usuarioId);
     }
 
-    public Optional<byte[]> getPrimeiraFotoProfissional(Integer profissionalId) {
-        List<FotoProfissional> fotos = fotoProfissionalRepository.findByProfissionalId(profissionalId);
-        if (fotos.isEmpty()) {
-            return Optional.empty();
-        }
-        return Optional.of(fotos.get(0).getFoto());
+    public void saveFotoUsuario(Integer usuarioId, byte[] foto) {
+        FotoUsuario fotoUsuario = new FotoUsuario();
+        fotoUsuario.setUsuarioId(usuarioId);
+        fotoUsuario.setFoto(foto);
+        fotoUsuarioRepository.save(fotoUsuario);
     }
 
-    public List<FotoProfissional> getFotosProfissional(Integer profissionalId) {
-        return fotoProfissionalRepository.findByProfissionalId(profissionalId);
+    public List<FotoServico> getFotosServico(Integer servicoId) {
+        return fotoServicoRepository.findByServicoId(servicoId);
     }
 
-    public FotoCliente saveFotoCliente(Integer clienteId, byte[] foto) {
-        FotoCliente fotoCliente = new FotoCliente();
-        fotoCliente.setClienteId(clienteId);
-        fotoCliente.setFoto(foto);
-        return fotoClienteRepository.save(fotoCliente);
+    public void saveFotoServico(Integer servicoId, byte[] foto) {
+        FotoServico fotoServico = new FotoServico();
+        fotoServico.setServicoId(servicoId);
+        fotoServico.setFoto(foto);
+        fotoServicoRepository.save(fotoServico);
     }
 
-    public FotoProfissional saveFotoProfissional(Integer profissionalId, byte[] foto) {
-        FotoProfissional fotoProfissional = new FotoProfissional();
-        fotoProfissional.setProfissionalId(profissionalId);
-        fotoProfissional.setFoto(foto);
-        return fotoProfissionalRepository.save(fotoProfissional);
+    public void deleteFotoUsuario(Integer usuarioId) {
+        fotoUsuarioRepository.deleteByUsuarioId(usuarioId);
+    }
+
+    public void deleteFotoServico(Integer servicoId) {
+        fotoServicoRepository.deleteByServicoId(servicoId);
+    }
+
+    public void deleteFotoUsuarioPorId(Integer fotoId) {
+        fotoUsuarioRepository.deleteById(fotoId);
+    }
+
+    public void deleteFotoServicoPorId(Integer fotoId) {
+        fotoServicoRepository.deleteById(fotoId);
     }
 }

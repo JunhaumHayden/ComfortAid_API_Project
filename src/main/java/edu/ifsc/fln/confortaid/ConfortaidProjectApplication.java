@@ -1,6 +1,6 @@
 package edu.ifsc.fln.confortaid;
 
-import edu.ifsc.fln.confortaid.model.InsertImages;
+import edu.ifsc.fln.confortaid.config.InsertImages;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

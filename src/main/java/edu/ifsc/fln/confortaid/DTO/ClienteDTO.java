@@ -1,6 +1,8 @@
-package edu.ifsc.fln.confortaid.model;
+package edu.ifsc.fln.confortaid.DTO;
 
     import lombok.*;
+
+    import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -15,4 +17,5 @@ public class ClienteDTO {
     private String numeroEndereco;
     private String complementoEndereco;
     private String cpf;
+    private LocalDate nascimento;
 }

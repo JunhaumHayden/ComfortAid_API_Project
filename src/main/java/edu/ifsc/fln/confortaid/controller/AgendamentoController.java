@@ -1,13 +1,14 @@
 package edu.ifsc.fln.confortaid.controller;
 
+import edu.ifsc.fln.confortaid.exception.HorarioOcupadoException;
 import edu.ifsc.fln.confortaid.model.Agendamento;
 import edu.ifsc.fln.confortaid.model.Cliente;
-import edu.ifsc.fln.confortaid.model.Profissional;
 import edu.ifsc.fln.confortaid.model.Servico;
 import edu.ifsc.fln.confortaid.repository.AgendamentoRepository;
 import edu.ifsc.fln.confortaid.repository.ClienteRepository;
 import edu.ifsc.fln.confortaid.repository.ProfissionalRepository;
 import edu.ifsc.fln.confortaid.repository.ServicoRepository;
+import edu.ifsc.fln.confortaid.service.AgendamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/agendamentos")
+@RequestMapping("/agendamentos")
 public class AgendamentoController {
 
     @Autowired
@@ -28,6 +29,8 @@ public class AgendamentoController {
     private ProfissionalRepository profissionalRepository;
     @Autowired
     private ClienteRepository clienteRepository;
+    @Autowired
+    private AgendamentoService agendamentoService;
 
     @GetMapping
     public List<Agendamento> listarTodos() {
@@ -41,12 +44,14 @@ public class AgendamentoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+
     @GetMapping("/profissional/{profissionalId}")
-public List<Agendamento> listarPorProfissional(@PathVariable Integer profissionalId) {
+    public List<Agendamento> listarPorProfissional(@PathVariable Integer profissionalId) {
     return agendamentoRepository.findAll().stream()
             .filter(agendamento -> agendamento.getServico().getProfissional().getId().equals(profissionalId))
             .collect(Collectors.toList());
 }
+
 
     @GetMapping("/cliente/{clienteId}")
     public List<Agendamento> listarPorCliente(@PathVariable Integer clienteId) {
@@ -55,42 +60,51 @@ public List<Agendamento> listarPorProfissional(@PathVariable Integer profissiona
                 .collect(Collectors.toList());
     }
 
-
     @PostMapping
     public ResponseEntity<Agendamento> criar(@RequestBody Agendamento agendamento) {
         Cliente cliente = clienteRepository.findById(agendamento.getCliente().getId())
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
         agendamento.setCliente(cliente);
-
         Servico servico = servicoRepository.findById(agendamento.getServico().getId())
                 .orElseThrow(() -> new RuntimeException("Servico não encontrado"));
-        Profissional profissional = profissionalRepository.findById(servico.getProfissional().getId())
-                .orElseThrow(() -> new RuntimeException("Profissional não encontrado"));
-        servico.setProfissional(profissional);
         agendamento.setServico(servico);
 
-        Agendamento novoAgendamento = agendamentoRepository.save(agendamento);
+        Agendamento novoAgendamento = agendamentoService.agendar(agendamento);
         return ResponseEntity.status(HttpStatus.CREATED).body(novoAgendamento);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Agendamento> atualizar(@PathVariable Integer id, @RequestBody Agendamento agendamentoAtualizado) {
+    @PutMapping("/reagendar/{id}")
+    public ResponseEntity<Agendamento> reagendar(@PathVariable Integer id, @RequestBody Agendamento agendamentoDetails) {
         return agendamentoRepository.findById(id)
                 .map(agendamento -> {
-                    agendamento.setDataHora(agendamentoAtualizado.getDataHora());
-                    agendamento.setServico(agendamentoAtualizado.getServico());
-                    return ResponseEntity.ok(agendamentoRepository.save(agendamento));
+                    Agendamento agendamentoReagendado = agendamentoService.reagendar(agendamentoDetails);
+                    return ResponseEntity.ok(agendamentoReagendado);
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> excluir(@PathVariable Integer id) {
+    public ResponseEntity<Object> cancelar(@PathVariable Integer id) {
         return agendamentoRepository.findById(id)
                 .map(agendamento -> {
-                    agendamentoRepository.delete(agendamento);
+                    agendamentoService.alterarStatus(agendamento, Agendamento.Status.CANCELADO);
                     return ResponseEntity.noContent().build();
                 })
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/status/{id}")
+    public ResponseEntity<Agendamento> alterarStatus(@PathVariable Integer id, @RequestBody Agendamento agendamentoDetails) {
+        return agendamentoRepository.findById(id)
+                .map(agendamento -> {
+                    agendamentoService.alterarStatus(agendamento, agendamentoDetails.getStatus());
+                    return ResponseEntity.ok(agendamento);
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @ExceptionHandler(HorarioOcupadoException.class)
+    public ResponseEntity<String> handleHorarioOcupadoException(HorarioOcupadoException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 }
