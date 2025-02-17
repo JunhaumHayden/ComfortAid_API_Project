@@ -1,7 +1,20 @@
+<div align="center">
+<img src="https://hermes.dio.me/tracks/a039b34c-7aa8-4a3d-b765-07c8c837f67a.png" alt="Logo BackEnd" width="80">
+</div>
 
+
+<h1 align="center"> ComfortAid Project </h1>
+
+
+
+![Static Badge](https://img.shields.io/badge/Powered_by-Maven-red)
+![Static Badge](https://img.shields.io/badge/Powered_by-Lombok-blue)
+![Static Badge](https://img.shields.io/badge/Powered_by-SpringBoot-green)
+![Static Badge](https://img.shields.io/badge/Powered_by-SpringDataJPA-orange)
+![Static Badge](https://img.shields.io/badge/Powered_by-BancoH2-yellow)
 
 ## Estrutura do Projeto
-Tecnologias Utilizadas:
+### Tecnologias Utilizadas:
 - Maven: Gerenciador de dependências.
 - Lombok: Para reduzir boilerplate (getters, setters, etc.).
 - Spring Boot: Framework para criar a API REST.
@@ -11,9 +24,49 @@ Tecnologias Utilizadas:
 Padrão de Projeto:
 - Usaremos MVC (Model-View-Controller) para organizar as camadas do sistema.
 
-### Diagrama de ER
-Segue o diagrama de ER do esquema do banco de dados gerado em Mermaid para documentação:
 
+### Comportamento Esperado do Projeto
+
+O projeto ComfortAid é uma aplicação de agendamento de serviços que permite a interação entre clientes e profissionais. Abaixo estão os comportamentos esperados do sistema:
+
+1. **Cadastro de Usuários**:
+    - Clientes e profissionais podem se cadastrar fornecendo informações pessoais e de contato.
+    - Cada usuário deve ter um login único e uma senha segura.
+
+2. **Gerenciamento de Serviços**:
+    - Profissionais podem criar, atualizar e excluir serviços que oferecem.
+    - Serviços devem incluir detalhes como nome, descrição, preço, duração e disponibilidade.
+
+3. **Agendamento de Serviços**:
+    - Clientes podem visualizar a lista de serviços disponíveis e agendar um serviço.
+    - O sistema deve permitir a seleção de data e hora para o agendamento.
+    - Agendamentos podem ser confirmados, cancelados ou marcados como atendidos.
+
+4. **Avaliação de Serviços**:
+    - Após a conclusão de um serviço, clientes podem avaliar o serviço prestado.
+    - Avaliações devem incluir uma nota e um comentário.
+
+5. **Gerenciamento de Imagens**:
+    - Usuários e serviços podem ter imagens associadas a eles.
+    - Imagens podem ser enviadas e recuperadas através de endpoints específicos.
+
+6. **Autenticação e Autorização**:
+    - O sistema deve garantir que apenas usuários autenticados possam acessar funcionalidades protegidas.
+    - Diferentes tipos de usuários (clientes e profissionais) devem ter permissões adequadas às suas funções.
+
+7. **Persistência de Dados**:
+    - Dados devem ser armazenados de forma persistente utilizando o banco de dados H2 durante o desenvolvimento e testes.
+    - Para produção, o sistema deve ser configurado para utilizar um banco de dados adequado.
+
+8. **Desempenho e Escalabilidade**:
+    - A aplicação deve ser capaz de lidar com múltiplas requisições simultâneas.
+    - Deve ser possível escalar a aplicação horizontalmente para suportar um número crescente de usuários.
+
+Esses comportamentos garantem que o sistema funcione de maneira eficiente e atenda às necessidades dos usuários finais.
+
+
+### Diagrama de ER
+Diagrama de ER do esquema do banco de dados gerado em Mermaid:
 
 
 ```mermaid
@@ -25,19 +78,21 @@ erDiagram
         VARCHAR senha "Senha criptografada"
         VARCHAR telefone "Telefone do usuário"
         VARCHAR cep "CEP do endereço"
-        VARCHAR numeroEndereco "Número do endereço"
-        VARCHAR complementoEndereco "Complemento do endereço"
+        VARCHAR numero_endereco "Número do endereço"
+        VARCHAR complemento_endereco "Complemento do endereço"
+        VARCHAR tipo "Tipo de usuário"
     }
 
     cliente {
         INT id_usuario PK, FK "Referência para tabela usuario"
         VARCHAR cpf "CPF único do cliente"
+        TIMESTAMP nascimento "Data de nascimento"
     }
 
     profissional {
         INT id_usuario PK, FK "Referência para tabela usuario"
         VARCHAR especialidade "Especialidade do profissional"
-        VARCHAR registroProfissional "Registro profissional único"
+        VARCHAR registro_profissional "Registro profissional único"
     }
 
     servico {
@@ -46,28 +101,61 @@ erDiagram
         TEXT descricao "Descrição do serviço"
         DECIMAL preco "Preço do serviço"
         INT duracao "Duração em minutos"
+        DATE data_disponivel "Data disponível"
         ENUM situacao "Situação: ATIVO, INATIVO, BLOQUEADO"
         INT profissional_id FK "Referência para tabela profissional"
     }
 
-    imagem {
+    agendamento {
+        INT id PK "Chave primária"
+        INT cliente_id FK "Referência para tabela cliente"
+        INT servico_id FK "Referência para tabela servico"
+        TIMESTAMP data_hora "Data e hora do agendamento"
+        ENUM status "Status: CONFIRMADO, PENDENTE, CANCELADO, ATENDIDO"
+    }
+
+    avaliacao {
+        INT id PK "Chave primária"
+        INT cliente_id FK "Referência para tabela cliente"
+        INT servico_id FK "Referência para tabela servico"
+        TIMESTAMP data_hora "Data e hora da avaliação"
+        TEXT comentario "Comentário do cliente"
+        INT nota "Nota da avaliação"
+    }
+
+    foto_usuario {
         INT id PK "Chave primária"
         INT usuario_id FK "Referência para tabela usuario"
-        LONGBLOB imagem "Imagem armazenada como binário"
-        VARCHAR tipo "MIME type da imagem (ex: image/png)"
+        BLOB foto "Foto armazenada como binário"
+    }
+
+    foto_servico {
+        INT id PK "Chave primária"
+        INT servico_id FK "Referência para tabela servico"
+        BLOB foto "Foto armazenada como binário"
+    }
+
+    login {
+        INT id_usuario PK, FK "Referência para tabela usuario"
+        VARCHAR login "Login do usuário"
+        VARCHAR senha "Senha do login"
     }
 
     %% Relacionamentos
     usuario ||--o| cliente : "1 para 1"
     usuario ||--o| profissional : "1 para 1"
     profissional ||--o{ servico : "1 para N"
-    usuario ||--o{ imagem : "1 para N"
+    cliente ||--o{ agendamento : "1 para N"
+    servico ||--o{ agendamento : "1 para N"
+    cliente ||--o{ avaliacao : "1 para N"
+    servico ||--o{ avaliacao : "1 para N"
+    usuario ||--o{ foto_usuario : "1 para N"
+    servico ||--o{ foto_servico : "1 para N"
+    usuario ||--o| login : "1 para 1"
 ```
-
-
 ### Diagrama de Classes
 
-Segue o diagrama de classes do projeto gerado em Mermaid para documentação:
+Diagrama de classes do projeto gerado em Mermaid:
 
 ```mermaid
 classDiagram
@@ -80,11 +168,13 @@ classDiagram
         +String cep
         +String numeroEndereco
         +String complementoEndereco
+        +String tipo
     }
 
     class Cliente {
         +int id_usuario
         +String cpf
+        +Date nascimento
     }
 
     class Profissional {
@@ -99,34 +189,83 @@ classDiagram
         +String descricao
         +float preco
         +int duracao
+        +Date dataDisponivel
         +String situacao
         +int profissional_id
     }
 
-    class Imagem {
+    class Agendamento {
+        +int id
+        +int cliente_id
+        +int servico_id
+        +Timestamp dataHora
+        +String status
+    }
+
+    class Avaliacao {
+        +int id
+        +int cliente_id
+        +int servico_id
+        +Timestamp dataHora
+        +String comentario
+        +int nota
+    }
+
+    class FotoUsuario {
         +int id
         +int usuario_id
-        +byte[] imagem
-        +String tipo
+        +byte[] foto
+    }
+
+    class FotoServico {
+        +int id
+        +int servico_id
+        +byte[] foto
+    }
+
+    class Login {
+        +int id_usuario
+        +String login
+        +String senha
     }
 
     Usuario <|-- Cliente : "herança"
     Usuario <|-- Profissional : "herança"
     Profissional "1" --> "0..*" Servico : "oferece"
-    Usuario "1" --> "0..*" Imagem : "possui"
+    Cliente "1" --> "0..*" Agendamento : "faz"
+    Servico "1" --> "0..*" Agendamento : "tem"
+    Cliente "1" --> "0..*" Avaliacao : "dá"
+    Servico "1" --> "0..*" Avaliacao : "recebe"
+    Usuario "1" --> "0..*" FotoUsuario : "tem"
+    Servico "1" --> "0..*" FotoServico : "tem"
+    Usuario "1" --> "1" Login : "usa"
 ```
 
-## Explicação do Diagrama
-Tabelas principais:
-usuario: Base de todas as entidades, representando informações compartilhadas.
-cliente e profissional: Estendem usuario com atributos específicos para cada tipo de usuário.
-servico: Associado a um profissional, detalha os serviços oferecidos.
-imagem: Tabela separada para armazenar imagens relacionadas aos usuários.
-Relacionamentos:
-usuario é pai de cliente e profissional (herança 1-para-1).
-profissional está relacionado a servico (1-para-muitos).
-usuario está relacionado a imagem (1-para-muitos), permitindo múltiplas imagens por usuário.
+
+### Explicação do Diagrama
+
+#### Tabelas principais:
+- **usuario**: Base de todas as entidades, representando informações compartilhadas entre clientes e profissionais.
+- **cliente** e **profissional**: Estendem a tabela usuario com atributos específicos para cada tipo de usuário.
+- **servico**: Associado a um profissional, detalha os serviços oferecidos.
+- **agendamento**: Representa os agendamentos feitos pelos clientes para os serviços oferecidos.
+- **avaliacao**: Contém as avaliações feitas pelos clientes sobre os serviços.
+- **foto_usuario** e **foto_servico**: Tabelas separadas para armazenar imagens relacionadas aos usuários e serviços, respectivamente.
+- **login**: Armazena as informações de login dos usuários.
+
+#### Relacionamentos:
+- **usuario** é pai de **cliente** e **profissional** (herança 1-para-1).
+- **profissional** está relacionado a **servico** (1-para-muitos).
+- **cliente** está relacionado a **agendamento** (1-para-muitos).
+- **servico** está relacionado a **agendamento** (1-para-muitos).
+- **cliente** está relacionado a **avaliacao** (1-para-muitos).
+- **servico** está relacionado a **avaliacao** (1-para-muitos).
+- **usuario** está relacionado a **foto_usuario** (1-para-muitos), permitindo múltiplas imagens por usuário.
+- **servico** está relacionado a **foto_servico** (1-para-muitos), permitindo múltiplas imagens por serviço.
+- **usuario** está relacionado a **login** (1-para-1).
+
 Esse diagrama documenta claramente o modelo de dados e pode ser usado como referência para o desenvolvimento e comunicação do projeto.
+
 
 ### Configurando a porta da aplicação
 A aplicação ComfortAid usa a porta 5000 por padrão, pode-se fazer uma das seguintes configurações:
@@ -244,3 +383,9 @@ curl -X GET "http://localhost:8080/api/imagens/profissional/1" --output profissi
 > Esses exemplos mostram como você pode interagir com os endpoints para enviar e recuperar imagens usando curl. Certifique-se de substituir /path/to/your/image.jpg pelo caminho real da imagem que você deseja enviar.
 
 > Também é possível usar o [postman](https://cursos.alura.com.br/forum/topico-envio-de-foto-via-postman-197419#:~:text=Com%20a%20API%20em%20execução,a%20requisição%20do%20tipo%20POST.)
+
+# Author
+
+| [<img src="https://avatars.githubusercontent.com/u/79289647?v=4" width=115><br><sub>Carlos Hayden</sub>](https://github.com/JunhaumHayden) |
+| :---: |
+
