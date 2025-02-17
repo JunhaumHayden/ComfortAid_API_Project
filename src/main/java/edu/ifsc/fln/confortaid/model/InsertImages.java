@@ -27,13 +27,13 @@ public class InsertImages {
                 }
                 // Insert images into foto_cliente
                 try (PreparedStatement pstmt = conn.prepareStatement(sqlCliente)) {
-                    try (InputStream inputStream = new FileInputStream("src/main/resources/img/camera.png")) {
+                    try (InputStream inputStream = new FileInputStream("src/main/resources/img/01ana.jpg")) {
                         pstmt.setInt(1, 1);
                         pstmt.setBlob(2, inputStream);
                         pstmt.executeUpdate();
                     }
 
-                    try (InputStream inputStream = new FileInputStream("src/main/resources/img/camera.png")) {
+                    try (InputStream inputStream = new FileInputStream("src/main/resources/img/02bia.jpg")) {
                         pstmt.setInt(1, 2);
                         pstmt.setBlob(2, inputStream);
                         pstmt.executeUpdate();
@@ -42,13 +42,13 @@ public class InsertImages {
 
                 // Insert images into foto_profissional
                 try (PreparedStatement pstmt = conn.prepareStatement(sqlProfissional)) {
-                    try (InputStream inputStream = new FileInputStream("src/main/resources/img/camera.png")) {
+                    try (InputStream inputStream = new FileInputStream("src/main/resources/img/01dany.jpg")) {
                         pstmt.setInt(1, 1);
                         pstmt.setBlob(2, inputStream);
                         pstmt.executeUpdate();
                     }
 
-                    try (InputStream inputStream = new FileInputStream("src/main/resources/img/camera.png")) {
+                    try (InputStream inputStream = new FileInputStream("src/main/resources/img/01emy.jpg")) {
                         pstmt.setInt(1, 2);
                         pstmt.setBlob(2, inputStream);
                         pstmt.executeUpdate();
