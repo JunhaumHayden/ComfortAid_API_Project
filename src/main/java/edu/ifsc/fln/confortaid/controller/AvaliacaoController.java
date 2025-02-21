@@ -1,7 +1,9 @@
 package edu.ifsc.fln.confortaid.controller;
 
 import edu.ifsc.fln.confortaid.model.Avaliacao;
+import edu.ifsc.fln.confortaid.model.Servico;
 import edu.ifsc.fln.confortaid.repository.AvaliacaoRepository;
+import edu.ifsc.fln.confortaid.service.AvaliacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +19,14 @@ public class AvaliacaoController {
     @Autowired
     private AvaliacaoRepository avaliacaoRepository;
 
+    @Autowired
+    private AvaliacaoService avaliacaoService;
     @GetMapping
-    public List<Avaliacao> listarTodos() {
-        return avaliacaoRepository.findAll();
+    public List<Avaliacao> listarTodosOuPorServicoId(@RequestParam(required = false) Long servicoId) {
+        if (servicoId != null) {
+            return avaliacaoService.buscarPorServicoId(servicoId.intValue());
+        }
+        return avaliacaoService.listarTodas();
     }
 
     @GetMapping("/{id}")

@@ -72,6 +72,7 @@ public class UsuarioController {
             usuarioDTO.setNome(token.getNome());
             usuarioDTO.setEmail(token.getEmail());
             usuarioDTO.setTelefone(token.getTelefone());
+            usuarioDTO.setTipo(token.getTipo());
 
             return ResponseEntity.ok(usuarioDTO);
         } else {

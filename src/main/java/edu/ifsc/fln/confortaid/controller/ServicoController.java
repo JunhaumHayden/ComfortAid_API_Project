@@ -32,6 +32,16 @@ public class ServicoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/profissional/{id}")
+    public ResponseEntity<List<Servico>> buscarPorProfissionalId(@PathVariable Integer id) {
+        List<Servico> servicos = servicoRepository.findByProfissionalId(id);
+        if (servicos.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(servicos);
+        }
+    }
+
     @PostMapping
     public ResponseEntity<Servico> criar(@RequestBody Servico servico) {
         Profissional profissional = profissionalRepository.findById(servico.getProfissional().getId())
@@ -70,4 +80,6 @@ public class ServicoController {
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
+
+
 }
