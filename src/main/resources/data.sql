@@ -1,10 +1,10 @@
 -- Inserir dados na tabela Usuario
 INSERT INTO usuario (nome, email, senha, telefone, cep, numero_endereco, complemento_endereco, tipo)
 VALUES
-    ('Ana Amalia', 'ana@mail.com', 'senha', '(11) 99999-0001', '88111-111', '001', 'Apto 101', 'cliente'),
-    ('Bia Bernardes', 'Bia@mail.com', 'senha', '(21) 98888-0002', '88222-222', '002', 'Casa', 'cliente'),
-    ('Dany Damaris', 'dany@mail.com', 'senha', '(31) 97777-0003', '88333-333', '003', 'Sala 3', 'profissional'),
-    ('Emy Esteves', 'emy@mail.com', 'senha', '(41) 96666-0004', '88333-444', '004', 'casa', 'profissional');
+    ('Ana Amalia', 'ana@mail.com', 'senha', '(11) 99999-0001', '88010-000', '001', 'Apto 101', 'cliente'),
+    ('Bia Bernardes', 'Bia@mail.com', 'senha', '(21) 98888-0002', '88034-000', '002', 'Casa', 'cliente'),
+    ('Dany Damaris', 'dany@mail.com', 'senha', '(31) 97777-0003', '88056-000', '003', 'Sala 3', 'profissional'),
+    ('Emy Esteves', 'emy@mail.com', 'senha', '(41) 96666-0004', '88075-000', '004', 'casa', 'profissional');
 
 -- Inserir dados na tabela Cliente
 INSERT INTO cliente (id_usuario, cpf, nascimento)
