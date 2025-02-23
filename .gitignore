@@ -308,10 +308,6 @@ node_modules/
 *.dsw
 *.dsp
 
-# Visual Studio 6 technical files
-*.ncb
-*.aps
-
 # Visual Studio LightSwitch build output
 **/*.HTMLClient/GeneratedArtifacts
 **/*.DesktopClient/GeneratedArtifacts
@@ -405,10 +401,31 @@ FodyWeavers.xsd
 *.sln.iml
 .idea
 
-# Diretórios
-img/
+# Ignorar configurações do IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+
+# Ignorar arquivos gerados pelo sistema operacional
+.DS_Store
+Thumbs.db
+
+# Ignorar dependências baixadas pelo Maven (não é necessário subir essa pasta)
+.mvn/
+pom.xml.tag
+pom.xml.releaseBackup
+dependency-reduced-pom.xml
+release.properties
+
+# Ignorar configurações do Java/Maven
+.settings/
+.classpath
+.project
+
+
 # Diretórios
 img/
 vendor/
-.mvn/
 .vscode/
+target/
+
