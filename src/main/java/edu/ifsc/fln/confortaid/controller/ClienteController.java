@@ -30,12 +30,22 @@ public class ClienteController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/{id}")
-    public ResponseEntity<ClienteDTO> criar(@RequestBody Cliente cliente) {
+    @PostMapping()
+    public ResponseEntity<?> criar(@RequestBody Cliente cliente) {
+        if (clienteRepository.findByEmail(cliente.getEmail()).isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Erro: O email já está cadastrado.");
+        }
+
+        if (clienteRepository.findByCpf(cliente.getCpf()).isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Erro: O registro cliente já está cadastrado.");
+        }
         Cliente novoCliente = clienteRepository.save(cliente);
         ClienteDTO clienteDTO = convertToDTO(novoCliente);
         return ResponseEntity.status(HttpStatus.CREATED).body(clienteDTO);
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<ClienteDTO> atualizar(@PathVariable Integer id, @RequestBody Cliente clienteAtualizado) {

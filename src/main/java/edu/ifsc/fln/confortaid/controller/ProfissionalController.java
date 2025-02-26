@@ -31,11 +31,22 @@ public class ProfissionalController {
     }
 
     @PostMapping
-    public ResponseEntity<ProfissionalDTO> criar(@RequestBody Profissional profissional) {
+    public ResponseEntity<?> criar(@RequestBody Profissional profissional) {
+        if (profissionalRepository.findByEmail(profissional.getEmail()).isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Erro: O email já está cadastrado.");
+        }
+
+        if (profissionalRepository.findByRegistroProfissional(profissional.getRegistroProfissional()).isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Erro: O registro profissional já está cadastrado.");
+        }
+
         Profissional novoProfissional = profissionalRepository.save(profissional);
         ProfissionalDTO profissionalDTO = convertToDTO(novoProfissional);
         return ResponseEntity.status(HttpStatus.CREATED).body(profissionalDTO);
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<ProfissionalDTO> atualizar(@PathVariable Integer id, @RequestBody Profissional profissionalAtualizado) {

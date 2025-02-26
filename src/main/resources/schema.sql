@@ -3,17 +3,17 @@ CREATE TABLE usuario(
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     senha VARCHAR(256) NOT NULL,
-    telefone VARCHAR(15),
-    cep VARCHAR(9),
+    telefone VARCHAR(20),
+    cep VARCHAR(20),
     complemento_endereco VARCHAR(100),
-    numero_endereco VARCHAR(10),
+    numero_endereco VARCHAR(20),
     tipo VARCHAR(12) NOT NULL,
     CONSTRAINT pk_usuario PRIMARY KEY(id)
 );
 
 CREATE TABLE cliente(
     id_usuario INT NOT NULL REFERENCES usuario(id),
-    cpf VARCHAR(11) NOT NULL UNIQUE,
+    cpf VARCHAR(20) NOT NULL,
     nascimento TIMESTAMP,
     CONSTRAINT pk_cliente PRIMARY KEY (id_usuario),
     CONSTRAINT fk_cliente_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id)
@@ -24,7 +24,7 @@ CREATE TABLE cliente(
 CREATE TABLE profissional(
     id_usuario INT NOT NULL REFERENCES usuario(id),
     especialidade VARCHAR(100) NOT NULL,
-    registro_profissional VARCHAR(50) UNIQUE,
+    registro_profissional VARCHAR(50),
     CONSTRAINT pk_profissional PRIMARY KEY (id_usuario),
     CONSTRAINT fk_profissional_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id)
       ON DELETE CASCADE

@@ -18,10 +18,10 @@
 - Maven: Gerenciador de dependências.
 - Lombok: Para reduzir boilerplate (getters, setters, etc.).
 - Spring Boot: Framework para criar a API REST.
+- Spring Web: Crie aplicativos web, incluindo RESTful, usando Spring MVC e Apache Tomcat como o contêiner incorporado padrão.
 - Spring Data JPA: Para persistência de dados.
 - Banco H2: Banco de dados em memória, ideal para desenvolvimento e testes.
 - Heroku: Plataforma para publicação.
-Padrão de Projeto:
 - Usaremos MVC (Model-View-Controller) para organizar as camadas do sistema.
 
 
@@ -64,10 +64,72 @@ O projeto ComfortAid é uma aplicação de agendamento de serviços que permite 
 
 Esses comportamentos garantem que o sistema funcione de maneira eficiente e atenda às necessidades dos usuários finais.
 
+### Diagrama de Casos de Uso
+
+```mermaid
+%% Diagrama de Casos de Uso para o projeto ComfortAid
+%% Representa as interações entre os atores e os casos de uso do sistema
+
+%% Definição dos atores
+actor Cliente
+actor Profissional
+actor Administrador
+
+%% Definição dos casos de uso
+usecase UC1 as "Cadastro de Usuários"
+usecase UC2 as "Gerenciamento de Serviços"
+usecase UC3 as "Agendamento de Serviços"
+usecase UC4 as "Avaliação de Serviços"
+usecase UC5 as "Gerenciamento de Imagens"
+usecase UC6 as "Autenticação e Autorização"
+usecase UC7 as "Persistência de Dados"
+usecase UC8 as "Desempenho e Escalabilidade"
+
+%% Relacionamentos entre atores e casos de uso
+Cliente --> UC1
+Cliente --> UC3
+Cliente --> UC4
+Cliente --> UC5
+Cliente --> UC6
+
+Profissional --> UC1
+Profissional --> UC2
+Profissional --> UC5
+Profissional --> UC6
+
+Administrador --> UC1
+Administrador --> UC2
+Administrador --> UC3
+Administrador --> UC4
+Administrador --> UC5
+Administrador --> UC6
+Administrador --> UC7
+Administrador --> UC8
+```
+
+
+### Diagrama de Sequência
+
+Diagrama de sequência para o processo de agendamento de um serviço:
+
+```mermaid
+sequenceDiagram
+    participant Cliente
+    participant Sistema
+    participant Profissional
+
+    Cliente->>Sistema: Solicita lista de serviços
+    Sistema->>Cliente: Retorna lista de serviços
+    Cliente->>Sistema: Seleciona serviço e solicita agendamento
+    Sistema->>Profissional: Verifica disponibilidade
+    Profissional-->>Sistema: Confirma disponibilidade
+    Sistema->>Cliente: Confirma agendamento
+    Cliente->>Sistema: Avalia serviço após conclusão
+    Sistema->>Profissional: Envia avaliação
+``` 
 
 ### Diagrama de ER
 Diagrama de ER do esquema do banco de dados gerado em Mermaid:
-
 
 ```mermaid
 erDiagram
@@ -157,6 +219,14 @@ erDiagram
 
 Diagrama de classes do projeto gerado em Mermaid:
 
+Além da modelagem das entidades de domínio e seus relacionamentos tabém utilizou-se de classes auxiliares para representar a estrutura do projeto:
+
+- DTO (Data Transfer Object): Usado para transferir dados entre camadas da aplicação.
+- Repository: Responsável pela interação com a camada de persistência (banco de dados).
+- Service: Contém a lógica de negócios da aplicação.
+- Controller: Gerencia as requisições HTTP e direciona para os serviços apropriados.
+- Exception: Define classes de exceção personalizadas para tratamento de erros específicos.
+
 ```mermaid
 classDiagram
     class Usuario {
@@ -240,7 +310,6 @@ classDiagram
     Servico "1" --> "0..*" FotoServico : "tem"
     Usuario "1" --> "1" Login : "usa"
 ```
-
 
 ### Explicação do Diagrama
 
@@ -354,6 +423,21 @@ POST http://localhost:8080/api/agendamentos
     "dataHora": "2024-01-12T10:00:00"
 }
 ```
+### Criar um novo Profissional
+curl -X POST http://localhost:5000/profissionais -H "Content-Type: application/json" -d '{
+"nome": "Clara Clarinete",
+"email": "clara@mail.com",
+"senha": "senha22",
+"telefone": "(48) 98888-2222",
+"cep": "88020-222",
+"numeroEndereco": "222",
+"complementoEndereco": "Sala22",
+"tipo": "profissional",
+"especialidade": "Fitoterapia",
+"registroProfissional": "REG2012"
+}'
+Resposta:
+{"id":16,"nome":"Clara Clarinete","email":"clara@mail.com","telefone":"(48) 98888-2222","especialidade":"Fitoterapia","registroProfissional":"REG2012"}%
 
 ### Enviar uma imagem para um cliente
 Você pode usar o curl para enviar uma imagem para o endpoint /api/imagens/cliente/{id}:

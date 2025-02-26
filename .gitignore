@@ -424,7 +424,6 @@ release.properties
 
 
 # Diretórios
-img/
 vendor/
 .vscode/
 target/
